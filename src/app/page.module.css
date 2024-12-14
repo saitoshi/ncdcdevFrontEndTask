@@ -1,20 +1,77 @@
 .page {
-  background-color: white;
+  margin: 0;
+  background-color: #fff;
   color: #333;
 }
 
 .pageContainer {
-  background-color: #f5f8fa;
   display: flex;
   flex-direction: row;
 }
 
 #sideMenu {
-  width: 33%;
+  width: 33.3%;
+}
+
+#sideContainer {
+  margin: 30px 0px 0 40px;
+  position: relative;
   height: 100vh;
 }
 
+.sideTitle {
+  font-size: 25px;
+  margin: 0;
+  margin-bottom: 20px;
+}
+.sideTitle img {
+  vertical-align: middle;
+}
+#sideButton {
+  position: relative;
+  text-align: left;
+  color: #333;
+  height: 100px;
+}
+#sideEdit {
+  position: absolute;
+  bottom: 0;
+  text-align: right;
+  background-color: #f5f8fa;
+  width: 100%;
+}
+#sideEdit button {
+  background-color: #4cb3f8;
+  color: white;
+  border: 1px solid #4cb3f8;
+  border-radius: 8px;
+}
 #mainContent {
-  width: 66%;
+  width: 66.6%;
   height: 100vh;
+  border-left: 1px solid #f5f8fa;
+  background-color: #fff;
+  height: 100vh;
+}
+
+#mainContainer {
+  margin: 30px 40px 0 40px;
+  padding: 30px;
+  background-color: #f5f8fa;
+  border-radius: 16px;
+  position: relative;
+}
+.mainTitle {
+  margin: 20px 30px;
+}
+
+.mainText {
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 30px;
+}
+
+#copyRight {
+  position: absolute;
+  bottom: 0;
 }
