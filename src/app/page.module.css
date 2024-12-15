@@ -29,9 +29,10 @@
 }
 #sideButton {
   position: relative;
+  height: 44px;
   text-align: left;
   color: #333;
-  height: 100px;
+  margin: 5px 0;
 }
 #sideEdit {
   position: absolute;
