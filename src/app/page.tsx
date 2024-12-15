@@ -6,6 +6,11 @@ import { IContent } from './_utils/type';
 export default function Home() {
   const [contents, setContents] = useState<IContent[]>();
   const [current, setCurrent] = useState<IContent | undefined>();
+  const [load, setLoad] = useState<boolean>(false);
+  const [editTitle, setEditTitle] = useState<boolean>(false);
+  const [editBody, setEditBody] = useState<boolean>(false);
+  const [currentTitle, setCurrentTitle] = useState<IContent['title']>();
+  const [currentBody, setCurrentBody] = useState<IContent['body']>();
   /**
    * @name getContents()
    * @desc 登録されているコンテンツを取り出す
@@ -16,17 +21,25 @@ export default function Home() {
       method: 'GET',
     });
     const contentData = await contentCall.json();
+
     await setContents(contentData);
+    await console.log(contentData);
+    await setLoad(false);
     await setCurrent(contentData[0]);
   };
 
   const setCurrentContent = async (contents: IContent[], content: IContent) => {
     console.log(contents[content.id - 1]);
     setCurrent(contents[content.id - 1]);
+    setCurrentTitle(content.title);
+    setCurrentBody(content.body);
   };
   useEffect(() => {
     getContents();
   }, []);
+  if (load) {
+    return <></>;
+  }
   return (
     <div className={styles.page}>
       <div className={styles.pageContainer}>
@@ -74,23 +87,121 @@ export default function Home() {
         {/** コンテンツーの設定 */}
         <div id={styles.mainContent}>
           <div id={styles.mainContainer}>
-            <div className={styles.contentArea}>
-              <h2 className={styles.mainTitle}>{current?.title}</h2>
-              <div className={styles.mainText}>
-                <p>{current?.body}</p>
+            <div id='editTitle'>
+              <div className='inputSection'>
+                {editTitle ? (
+                  <div id='editSection'>
+                    <div className='inputSection'>
+                      <input
+                        className='activeForm'
+                        value={currentTitle}
+                        onChange={(e: any) => {
+                          setCurrentTitle(e.target.value);
+                        }}></input>
+                    </div>
+                  </div>
+                ) : (
+                  <h2 className='mainTitle'>{currentTitle}</h2>
+                )}
+              </div>
+              <div className='buttonSection'>
+                {editTitle ? (
+                  <>
+                    <button
+                      className='cancelButton'
+                      onClick={() => setEditTitle(false)}>
+                      <Image
+                        src={'img/icon/cancel.svg'}
+                        width={20}
+                        height={20}
+                        alt='Logo'
+                      />
+                      <br />
+                      Cancel
+                    </button>
+                    <button className='saveButton'>
+                      <Image
+                        src={'img/icon/save.svg'}
+                        width={20}
+                        height={20}
+                        alt='Logo'
+                      />
+                      <br />
+                      Save
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className='activateEdit'
+                    onClick={() => setEditTitle(true)}>
+                    <Image
+                      src={'img/icon/edit.svg'}
+                      width={40}
+                      height={20}
+                      alt='Logo'
+                    />
+                    <br />
+                    Edit
+                  </button>
+                )}
               </div>
             </div>
-            <div className={styles.editArea}>
-              <button>
-                <Image
-                  src={'img/icon/edit.svg'}
-                  width={40}
-                  height={20}
-                  alt='Logo'
-                />
-                <br />
-                Edit
-              </button>
+            <div id='editBody'>
+              <div className='inputSection'>
+                {editBody ? (
+                  <textarea
+                    id='bodySection'
+                    onChange={(e: any) => {
+                      setCurrentBody(e.target.value);
+                    }}
+                    rows={4}
+                    cols={50}
+                    value={currentBody}></textarea>
+                ) : (
+                  <p className='mainText'>{currentBody}</p>
+                )}
+              </div>
+              <div className='buttonSection'>
+                {editBody ? (
+                  <>
+                    <button
+                      className='cancelButton'
+                      onClick={() => setEditBody(false)}>
+                      <Image
+                        src={'img/icon/cancel.svg'}
+                        width={20}
+                        height={20}
+                        alt='Logo'
+                      />
+                      <br />
+                      Cancel
+                    </button>
+                    <button className='saveButton'>
+                      <Image
+                        src={'img/icon/save.svg'}
+                        width={20}
+                        height={20}
+                        alt='Logo'
+                      />
+                      <br />
+                      Save
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className='activateEdit'
+                    onClick={() => setEditBody(true)}>
+                    <Image
+                      src={'img/icon/edit.svg'}
+                      width={40}
+                      height={20}
+                      alt='Logo'
+                    />
+                    <br />
+                    Edit
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

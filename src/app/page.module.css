@@ -74,8 +74,6 @@
   background-color: #f5f8fa;
   border-radius: 16px;
   position: relative;
-  display: flex;
-  flex-direction: row;
 }
 .contentArea {
   width: 75%;
