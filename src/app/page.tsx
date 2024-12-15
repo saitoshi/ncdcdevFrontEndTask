@@ -3,10 +3,13 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { IContent } from './_utils/type';
+import { EditTitle } from './_components/EditTitle';
+import { EditMessage } from './_components/EditMessage';
 export default function Home() {
   const [contents, setContents] = useState<IContent[]>();
   const [current, setCurrent] = useState<IContent | undefined>();
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [load, setLoad] = useState<boolean>(true);
   /**
    * @name getContents()
    * @desc 登録されているコンテンツを取り出す
@@ -19,15 +22,19 @@ export default function Home() {
     const contentData = await contentCall.json();
     await setContents(contentData);
     await setCurrent(contentData[0]);
+    await setLoad(false);
   };
 
   const setCurrentContent = async (contents: IContent[], content: IContent) => {
-    console.log(contents[content.id - 1]);
-    setCurrent(contents[content.id - 1]);
+    await console.log(contents[content.id - 1]);
+    await setCurrent(contents[content.id - 1]);
   };
   useEffect(() => {
     getContents();
   }, []);
+  if (load) {
+    return <div> Loading</div>;
+  }
   return (
     <div className={styles.page}>
       <div className={styles.pageContainer}>
@@ -107,35 +114,16 @@ export default function Home() {
         {/** コンテンツーの設定 */}
         <div id={styles.mainContent}>
           <div id={styles.mainContainer}>
-            <div className={styles.contentArea}>
-              <h2 className={styles.mainTitle}>{current?.title}</h2>
-              <div className={styles.mainText}>
-                <p>{current?.body}</p>
-              </div>
-            </div>
-            <div className={styles.editArea}>
-              <button className={styles.fillButton}>
-                <Image
-                  src={'img/icon/edit.svg'}
-                  width={40}
-                  height={20}
-                  alt='Logo'
-                />
-                <br />
-                Edit
-              </button>
-
-              <button className={styles.fillButton}>
-                <Image
-                  src={'img/icon/edit.svg'}
-                  width={40}
-                  height={20}
-                  alt='Logo'
-                />
-                <br />
-                Edit
-              </button>
-            </div>
+            <EditTitle
+              id={current!.id}
+              title={current!.title}
+              body={current!.body}
+            />
+            <EditMessage
+              id={current!.id}
+              title={current!.title}
+              body={current!.body}
+            />
           </div>
         </div>
       </div>

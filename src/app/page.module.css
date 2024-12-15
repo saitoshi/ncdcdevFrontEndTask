@@ -88,9 +88,6 @@
   padding: 30px;
   background-color: #f5f8fa;
   border-radius: 16px;
-  position: relative;
-  display: flex;
-  flex-direction: row;
 }
 .contentArea {
   width: 75%;
@@ -99,13 +96,6 @@
   margin: 20px 30px;
 }
 
-.mainText {
-  border-radius: 8px;
-  background-color: #fff;
-  padding: 30px;
-  overflow-y: scroll;
-  height: 500px;
-}
 .editArea {
   width: 25%;
   margin-left: 20px;

@@ -1,0 +1,71 @@
+#editSection,
+#editBody {
+  display: flex;
+  flex-direction: row;
+}
+input,
+textarea {
+  width: 95%;
+}
+
+textarea {
+  min-height: 500px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.mainText {
+  border-radius: 8px;
+  background-color: #fff;
+  padding: 30px;
+  overflow-y: scroll;
+  height: 500px;
+}
+.activeForm {
+  border: 1px solid #4cb3f8;
+  font-size: 24px;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 5px 0 5px 20px;
+}
+#editSection {
+  margin: 0 0 20px 0;
+}
+.inputSection {
+  width: 75%;
+}
+
+.editSection {
+  width: 25%;
+}
+.buttonSection {
+  margin: 0 0 0 20px;
+  display: inline;
+}
+
+.saveButton {
+  background-color: #4cb3f8;
+  color: white;
+  border: 1px solid #4cb3f8;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.activateEdit {
+  width: 100px;
+  background-color: #4cb3f8;
+  color: white;
+  border: 1px solid #4cb3f8;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.cancelButton {
+  background-color: rgb(204, 204, 204);
+  color: white;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 4px;
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+#editSection h2 {
+  margin: 0;
+}
