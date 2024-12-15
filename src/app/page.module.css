@@ -49,17 +49,32 @@
 #sideEdit {
   position: absolute;
   bottom: 0;
-  text-align: right;
   background-color: #f5f8fa;
   width: 100%;
+  padding: 10px 0;
 }
-#sideEdit button,
-.editArea button {
+#editActivate {
+  text-align: right;
+}
+.newPageEdit {
+  display: inline-block;
+}
+
+.fillButton {
   background-color: #4cb3f8;
   color: white;
   border: 1px solid #4cb3f8;
   border-radius: 8px;
-  width: auto;
+  font-weight: bold;
+  width: 100px;
+}
+.outlineButton {
+  border: 1px solid #4cb3f8;
+  color: #4cb3f8;
+  background-color: white;
+  border-radius: 8px;
+
+  width: 100px;
 }
 
 #mainContent {
@@ -95,6 +110,10 @@
   width: 25%;
   margin-left: 20px;
   text-align: center;
+}
+
+.editArea button {
+  margin-top: 10px;
 }
 
 #copyRight {

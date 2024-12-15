@@ -6,6 +6,7 @@ import { IContent } from './_utils/type';
 export default function Home() {
   const [contents, setContents] = useState<IContent[]>();
   const [current, setCurrent] = useState<IContent | undefined>();
+  const [editMode, setEditMode] = useState<boolean>(false);
   /**
    * @name getContents()
    * @desc 登録されているコンテンツを取り出す
@@ -58,16 +59,48 @@ export default function Home() {
             })}
 
             <div id={styles.sideEdit}>
-              <button>
-                <Image
-                  src={'img/icon/edit.svg'}
-                  width={40}
-                  height={20}
-                  alt='Logo'
-                />
-                <br />
-                Edit
-              </button>
+              {!editMode ? (
+                <div id={styles.editActivate}>
+                  <button
+                    className={styles.fillButton}
+                    onClick={() => setEditMode(true)}>
+                    <Image
+                      src={'img/icon/edit.svg'}
+                      width={40}
+                      height={20}
+                      alt='Logo'
+                    />
+                    <br />
+                    Edit
+                  </button>
+                </div>
+              ) : (
+                <div id={styles.newPageEdit}>
+                  <button className={styles.outlineButton}>
+                    <Image
+                      src={'img/icon/+.svg'}
+                      width={40}
+                      height={20}
+                      alt='Logo'
+                    />
+                    <br />
+                    New Page
+                  </button>
+                  <div className='divider' />
+                  <button
+                    className={styles.fillButton}
+                    onClick={() => setEditMode(false)}>
+                    <Image
+                      src={'img/icon/done.svg'}
+                      width={40}
+                      height={20}
+                      alt='Logo'
+                    />
+                    <br />
+                    Done
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -81,7 +114,18 @@ export default function Home() {
               </div>
             </div>
             <div className={styles.editArea}>
-              <button>
+              <button className={styles.fillButton}>
+                <Image
+                  src={'img/icon/edit.svg'}
+                  width={40}
+                  height={20}
+                  alt='Logo'
+                />
+                <br />
+                Edit
+              </button>
+
+              <button className={styles.fillButton}>
                 <Image
                   src={'img/icon/edit.svg'}
                   width={40}

@@ -3,3 +3,10 @@ body {
   background-color: white;
   color: #333;
 }
+
+.divider {
+  width: 50px;
+  height: auto;
+  display: inline-flex;
+  justify-content: flex-start;
+}
