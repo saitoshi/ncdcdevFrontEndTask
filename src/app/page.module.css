@@ -27,12 +27,24 @@
 .sideTitle img {
   vertical-align: middle;
 }
-#sideButton {
+.sideButton {
   position: relative;
   height: 44px;
   text-align: left;
   color: #333;
-  margin: 5px 0;
+  text-decoration: none;
+}
+.sideButton p,
+.activeButton p {
+  margin: 5px 5px;
+}
+.activeButton,
+.sideButton:hover {
+  background-color: #f5f8fa;
+  border-radius: 4px;
+  color: #32a8f8;
+  height: 44px;
+  font-weight: bold;
 }
 #sideEdit {
   position: absolute;
@@ -41,18 +53,19 @@
   background-color: #f5f8fa;
   width: 100%;
 }
-#sideEdit button {
+#sideEdit button,
+.editArea button {
   background-color: #4cb3f8;
   color: white;
   border: 1px solid #4cb3f8;
   border-radius: 8px;
+  width: auto;
 }
+
 #mainContent {
   width: 66.6%;
-  height: 100vh;
   border-left: 1px solid #f5f8fa;
   background-color: #fff;
-  height: 100vh;
 }
 
 #mainContainer {
@@ -61,6 +74,11 @@
   background-color: #f5f8fa;
   border-radius: 16px;
   position: relative;
+  display: flex;
+  flex-direction: row;
+}
+.contentArea {
+  width: 75%;
 }
 .mainTitle {
   margin: 20px 30px;
@@ -70,6 +88,13 @@
   border-radius: 8px;
   background-color: #fff;
   padding: 30px;
+  overflow-y: scroll;
+  height: 500px;
+}
+.editArea {
+  width: 25%;
+  margin-left: 20px;
+  text-align: center;
 }
 
 #copyRight {

@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { IContent } from './_utils/type';
 export default function Home() {
   const [contents, setContents] = useState<IContent[]>();
-  const [current, setCurrent] = useState<IContent>();
+  const [current, setCurrent] = useState<IContent | undefined>();
   /**
    * @name getContents()
    * @desc 登録されているコンテンツを取り出す
@@ -20,9 +20,13 @@ export default function Home() {
     await setCurrent(contentData[0]);
   };
 
+  const setCurrentContent = async (contents: IContent[], content: IContent) => {
+    console.log(contents[content.id - 1]);
+    setCurrent(contents[content.id - 1]);
+  };
   useEffect(() => {
     getContents();
-  }, [contents]);
+  }, []);
   return (
     <div className={styles.page}>
       <div className={styles.pageContainer}>
@@ -40,8 +44,15 @@ export default function Home() {
             </h2>
             {contents?.map((content) => {
               return (
-                <div id={styles.sideButton} key={content.id}>
-                  {content.title}
+                <div
+                  onClick={() => setCurrentContent(contents, content)}
+                  className={
+                    current?.id !== content.id
+                      ? styles.sideButton
+                      : styles.activeButton
+                  }
+                  key={content.id}>
+                  <p>{content.title}</p>
                 </div>
               );
             })}
@@ -63,11 +74,24 @@ export default function Home() {
         {/** コンテンツーの設定 */}
         <div id={styles.mainContent}>
           <div id={styles.mainContainer}>
-            <h2 className={styles.mainTitle}>{current?.title}</h2>
-            <div className={styles.mainText}>
-              <p>{current?.body}</p>
+            <div className={styles.contentArea}>
+              <h2 className={styles.mainTitle}>{current?.title}</h2>
+              <div className={styles.mainText}>
+                <p>{current?.body}</p>
+              </div>
             </div>
-            <div id={styles.copyRight}>Copyright</div>
+            <div className={styles.editArea}>
+              <button>
+                <Image
+                  src={'img/icon/edit.svg'}
+                  width={40}
+                  height={20}
+                  alt='Logo'
+                />
+                <br />
+                Edit
+              </button>
+            </div>
           </div>
         </div>
       </div>
