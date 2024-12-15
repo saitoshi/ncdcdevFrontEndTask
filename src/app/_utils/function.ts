@@ -38,7 +38,7 @@ export const updateContent = async (
     });
     await console.log(response);
     if (response.status === 200) {
-      //location.reload();
+      await location.reload();
     }
   } catch (error) {
     return error;

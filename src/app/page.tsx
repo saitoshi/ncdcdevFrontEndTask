@@ -3,10 +3,12 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { IContent } from './_utils/type';
+import { updateContent } from './_utils/function';
 export default function Home() {
   const [contents, setContents] = useState<IContent[]>();
   const [current, setCurrent] = useState<IContent | undefined>();
   const [load, setLoad] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
   const [editTitle, setEditTitle] = useState<boolean>(false);
   const [editBody, setEditBody] = useState<boolean>(false);
   const [currentTitle, setCurrentTitle] = useState<IContent['title']>();
@@ -21,11 +23,12 @@ export default function Home() {
       method: 'GET',
     });
     const contentData = await contentCall.json();
-
     await setContents(contentData);
     await console.log(contentData);
     await setLoad(false);
     await setCurrent(contentData[0]);
+    await setCurrentTitle(contentData[0].title);
+    await setCurrentBody(contentData[0].body);
   };
 
   const setCurrentContent = async (contents: IContent[], content: IContent) => {
@@ -38,7 +41,7 @@ export default function Home() {
     getContents();
   }, []);
   if (load) {
-    return <></>;
+    return <div className={styles.page}></div>;
   }
   return (
     <div className={styles.page}>
@@ -71,16 +74,48 @@ export default function Home() {
             })}
 
             <div id={styles.sideEdit}>
-              <button>
-                <Image
-                  src={'img/icon/edit.svg'}
-                  width={40}
-                  height={20}
-                  alt='Logo'
-                />
-                <br />
-                Edit
-              </button>
+              {!editMode ? (
+                <div id={styles.editActivate}>
+                  <button
+                    className={'fillButton'}
+                    onClick={() => setEditMode(true)}>
+                    <Image
+                      src={'img/icon/edit.svg'}
+                      width={40}
+                      height={20}
+                      alt='Logo'
+                    />
+                    <br />
+                    Edit
+                  </button>
+                </div>
+              ) : (
+                <div id={styles.newPageEdit}>
+                  <button className={'outlineButton'}>
+                    <Image
+                      src={'img/icon/+.svg'}
+                      width={40}
+                      height={20}
+                      alt='Logo'
+                    />
+                    <br />
+                    New Page
+                  </button>
+                  <div className='divider' />
+                  <button
+                    className={'fillButton'}
+                    onClick={() => setEditMode(false)}>
+                    <Image
+                      src={'img/icon/done.svg'}
+                      width={40}
+                      height={20}
+                      alt='Logo'
+                    />
+                    <br />
+                    Done
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -119,7 +154,11 @@ export default function Home() {
                       <br />
                       Cancel
                     </button>
-                    <button className='saveButton'>
+                    <button
+                      className='saveButton'
+                      onClick={() =>
+                        updateContent(current!.id, currentTitle!, current!.body)
+                      }>
                       <Image
                         src={'img/icon/save.svg'}
                         width={20}
@@ -176,7 +215,11 @@ export default function Home() {
                       <br />
                       Cancel
                     </button>
-                    <button className='saveButton'>
+                    <button
+                      className='saveButton'
+                      onClick={() =>
+                        updateContent(current!.id, current!.title, currentBody!)
+                      }>
                       <Image
                         src={'img/icon/save.svg'}
                         width={20}

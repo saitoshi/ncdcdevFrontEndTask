@@ -52,14 +52,7 @@
   text-align: right;
   background-color: #f5f8fa;
   width: 100%;
-}
-#sideEdit button,
-.editArea button {
-  background-color: #4cb3f8;
-  color: white;
-  border: 1px solid #4cb3f8;
-  border-radius: 8px;
-  width: auto;
+  padding: 10px;
 }
 
 #mainContent {
