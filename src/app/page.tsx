@@ -6,7 +6,6 @@ import { IContent } from './_utils/type';
 import { updateContent, deleteContent, createContent } from './_utils/function';
 export default function Home() {
   const [contents, setContents] = useState<IContent[]>();
-  const [current, setCurrent] = useState<IContent | undefined>();
   const [load, setLoad] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editTitle, setEditTitle] = useState<boolean>(false);
@@ -14,8 +13,9 @@ export default function Home() {
   const [addMode, setAddMode] = useState<boolean>(false);
   const [inputTitle, setInputTitle] = useState<IContent['title']>();
   const [inputBody, setInputBody] = useState<IContent['body']>();
-  const [currentTitle, setCurrentTitle] = useState<IContent['title']>();
-  const [currentBody, setCurrentBody] = useState<IContent['body']>();
+  const [currentTitle, setCurrentTitle] = useState<IContent['title']>('');
+  const [currentBody, setCurrentBody] = useState<IContent['body']>('');
+  const [currentId, setCurrentId] = useState<IContent['id']>();
   /**
    * @name getContents()
    * @desc 登録されているコンテンツを取り出す
@@ -27,18 +27,26 @@ export default function Home() {
     });
     const contentData = await contentCall.json();
     await setContents(contentData);
-    await console.log(contentData);
     await setLoad(false);
-    await setCurrent(contentData[0]);
+    await setCurrentId(contentData[0].id);
     await setCurrentTitle(contentData[0].title);
     await setCurrentBody(contentData[0].body);
   };
-
+  /**
+   * @name setCurrentContent
+   * @desc 表示するコンテンツを設定する
+   * @param contents
+   * @param content
+   */
   const setCurrentContent = async (contents: IContent[], content: IContent) => {
-    console.log(contents[content.id - 1]);
-    setCurrent(contents[content.id - 1]);
-    setCurrentTitle(content.title);
-    setCurrentBody(content.body);
+    for (let i = 0; i < contents.length; i++) {
+      if (contents[i].id === content.id) {
+        console.log(content);
+        await setCurrentId(content.id);
+        await setCurrentTitle(content.title);
+        await setCurrentBody(content.body);
+      }
+    }
   };
   useEffect(() => {
     getContents();
@@ -66,7 +74,7 @@ export default function Home() {
                 <div
                   onClick={() => setCurrentContent(contents, content)}
                   className={
-                    current?.id !== content.id
+                    currentId !== content.id
                       ? styles.sideButton
                       : styles.activeButton
                   }
@@ -147,6 +155,7 @@ export default function Home() {
                   <div className='inputSection'>
                     <input
                       className='activeForm'
+                      type='text'
                       placeholder='コンテンツのタイトルを入力'
                       onChange={(e: any) => {
                         setInputTitle(e.target.value);
@@ -165,18 +174,6 @@ export default function Home() {
                       <br />
                       Cancel
                     </button>
-                    <button
-                      className='saveButton'
-                      onClick={() => createContent(inputTitle!, inputBody!)}>
-                      <Image
-                        src={'img/icon/save.svg'}
-                        width={20}
-                        height={20}
-                        alt='Logo'
-                      />
-                      <br />
-                      Save
-                    </button>
                   </div>
                 </div>
                 <div id='editBody'>
@@ -184,7 +181,7 @@ export default function Home() {
                     <textarea
                       id='bodySection'
                       className='activeBodyForm'
-                      onChange={(e: any) => {
+                      onChange={(e) => {
                         setInputBody(e.target.value);
                       }}
                       rows={4}
@@ -228,6 +225,7 @@ export default function Home() {
                       <div id='editSection'>
                         <div className='inputSection'>
                           <input
+                            type='text'
                             className='activeForm'
                             value={currentTitle}
                             onChange={(e: any) => {
@@ -258,9 +256,9 @@ export default function Home() {
                           className='saveButton'
                           onClick={() =>
                             updateContent(
-                              current!.id,
+                              currentId!,
                               currentTitle!,
-                              current!.body,
+                              currentBody!,
                             )
                           }>
                           <Image
@@ -322,13 +320,14 @@ export default function Home() {
                         </button>
                         <button
                           className='saveButton'
-                          onClick={() =>
+                          onClick={() => {
+                            console.log(currentId);
                             updateContent(
-                              current!.id,
-                              current!.title,
+                              currentId!,
+                              currentTitle!,
                               currentBody!,
-                            )
-                          }>
+                            );
+                          }}>
                           <Image
                             src={'img/icon/save.svg'}
                             width={20}
