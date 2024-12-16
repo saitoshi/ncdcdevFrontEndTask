@@ -35,6 +35,8 @@ textarea {
 }
 .activeBodyForm {
   border: 1px solid #4cb3f8;
+  border-radius: 8px;
+  padding: 5px 0 5px 20px;
 }
 #editTitle {
   margin: 0 0 20px 0;

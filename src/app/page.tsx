@@ -3,7 +3,7 @@ import styles from './page.module.css';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { IContent } from './_utils/type';
-import { updateContent } from './_utils/function';
+import { updateContent, deleteContent, createContent } from './_utils/function';
 export default function Home() {
   const [contents, setContents] = useState<IContent[]>();
   const [current, setCurrent] = useState<IContent | undefined>();
@@ -11,6 +11,9 @@ export default function Home() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editTitle, setEditTitle] = useState<boolean>(false);
   const [editBody, setEditBody] = useState<boolean>(false);
+  const [addMode, setAddMode] = useState<boolean>(false);
+  const [inputTitle, setInputTitle] = useState<IContent['title']>();
+  const [inputBody, setInputBody] = useState<IContent['body']>();
   const [currentTitle, setCurrentTitle] = useState<IContent['title']>();
   const [currentBody, setCurrentBody] = useState<IContent['body']>();
   /**
@@ -69,6 +72,17 @@ export default function Home() {
                   }
                   key={content.id}>
                   <p>{content.title}</p>
+                  {editMode ? (
+                    <Image
+                      src={'img/icon/delete.svg'}
+                      width={20}
+                      height={40}
+                      alt='deleteLogo'
+                      onClick={() => deleteContent(content.id)}
+                    />
+                  ) : (
+                    <></>
+                  )}
                 </div>
               );
             })}
@@ -91,12 +105,14 @@ export default function Home() {
                 </div>
               ) : (
                 <div id={styles.newPageEdit}>
-                  <button className={'outlineButton'}>
+                  <button
+                    className={'outlineButton'}
+                    onClick={() => setAddMode(true)}>
                     <Image
                       src={'img/icon/+.svg'}
                       width={40}
                       height={20}
-                      alt='Logo'
+                      alt='newPageLogo'
                     />
                     <br />
                     New Page
@@ -104,7 +120,10 @@ export default function Home() {
                   <div className='divider' />
                   <button
                     className={'fillButton'}
-                    onClick={() => setEditMode(false)}>
+                    onClick={() => {
+                      setEditMode(false);
+                      setAddMode(false);
+                    }}>
                     <Image
                       src={'img/icon/done.svg'}
                       width={40}
@@ -122,29 +141,21 @@ export default function Home() {
         {/** コンテンツーの設定 */}
         <div id={styles.mainContent}>
           <div id={styles.mainContainer}>
-            <div id='editTitle'>
-              <div className='inputSection'>
-                {editTitle ? (
-                  <div id='editSection'>
-                    <div className='inputSection'>
-                      <input
-                        className='activeForm'
-                        value={currentTitle}
-                        onChange={(e: any) => {
-                          setCurrentTitle(e.target.value);
-                        }}></input>
-                    </div>
+            {addMode ? (
+              <>
+                <div id='editTitle'>
+                  <div className='inputSection'>
+                    <input
+                      className='activeForm'
+                      placeholder='コンテンツのタイトルを入力'
+                      onChange={(e: any) => {
+                        setInputTitle(e.target.value);
+                      }}></input>
                   </div>
-                ) : (
-                  <h2 className='mainTitle'>{currentTitle}</h2>
-                )}
-              </div>
-              <div className='buttonSection'>
-                {editTitle ? (
-                  <>
+                  <div className='buttonSection'>
                     <button
                       className='cancelButton'
-                      onClick={() => setEditTitle(false)}>
+                      onClick={() => setAddMode(false)}>
                       <Image
                         src={'img/icon/cancel.svg'}
                         width={20}
@@ -156,9 +167,7 @@ export default function Home() {
                     </button>
                     <button
                       className='saveButton'
-                      onClick={() =>
-                        updateContent(current!.id, currentTitle!, current!.body)
-                      }>
+                      onClick={() => createContent(inputTitle!, inputBody!)}>
                       <Image
                         src={'img/icon/save.svg'}
                         width={20}
@@ -168,44 +177,24 @@ export default function Home() {
                       <br />
                       Save
                     </button>
-                  </>
-                ) : (
-                  <button
-                    className='activateEdit'
-                    onClick={() => setEditTitle(true)}>
-                    <Image
-                      src={'img/icon/edit.svg'}
-                      width={40}
-                      height={20}
-                      alt='Logo'
-                    />
-                    <br />
-                    Edit
-                  </button>
-                )}
-              </div>
-            </div>
-            <div id='editBody'>
-              <div className='inputSection'>
-                {editBody ? (
-                  <textarea
-                    id='bodySection'
-                    onChange={(e: any) => {
-                      setCurrentBody(e.target.value);
-                    }}
-                    rows={4}
-                    cols={50}
-                    value={currentBody}></textarea>
-                ) : (
-                  <p className='mainText'>{currentBody}</p>
-                )}
-              </div>
-              <div className='buttonSection'>
-                {editBody ? (
-                  <>
+                  </div>
+                </div>
+                <div id='editBody'>
+                  <div className='inputSection'>
+                    <textarea
+                      id='bodySection'
+                      className='activeBodyForm'
+                      onChange={(e: any) => {
+                        setInputBody(e.target.value);
+                      }}
+                      rows={4}
+                      cols={50}
+                      placeholder='コンテンツの内容を入力'></textarea>
+                  </div>
+                  <div className='buttonSection'>
                     <button
                       className='cancelButton'
-                      onClick={() => setEditBody(false)}>
+                      onClick={() => setAddMode(false)}>
                       <Image
                         src={'img/icon/cancel.svg'}
                         width={20}
@@ -217,9 +206,7 @@ export default function Home() {
                     </button>
                     <button
                       className='saveButton'
-                      onClick={() =>
-                        updateContent(current!.id, current!.title, currentBody!)
-                      }>
+                      onClick={() => createContent(inputTitle!, inputBody!)}>
                       <Image
                         src={'img/icon/save.svg'}
                         width={20}
@@ -229,23 +216,147 @@ export default function Home() {
                       <br />
                       Save
                     </button>
-                  </>
-                ) : (
-                  <button
-                    className='activateEdit'
-                    onClick={() => setEditBody(true)}>
-                    <Image
-                      src={'img/icon/edit.svg'}
-                      width={40}
-                      height={20}
-                      alt='Logo'
-                    />
-                    <br />
-                    Edit
-                  </button>
-                )}
-              </div>
-            </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {' '}
+                <div id='editTitle'>
+                  <div className='inputSection'>
+                    {editTitle ? (
+                      <div id='editSection'>
+                        <div className='inputSection'>
+                          <input
+                            className='activeForm'
+                            value={currentTitle}
+                            onChange={(e: any) => {
+                              setCurrentTitle(e.target.value);
+                            }}></input>
+                        </div>
+                      </div>
+                    ) : (
+                      <h2 className='mainTitle'>{currentTitle}</h2>
+                    )}
+                  </div>
+                  <div className='buttonSection'>
+                    {editTitle ? (
+                      <>
+                        <button
+                          className='cancelButton'
+                          onClick={() => setEditTitle(false)}>
+                          <Image
+                            src={'img/icon/cancel.svg'}
+                            width={20}
+                            height={20}
+                            alt='Logo'
+                          />
+                          <br />
+                          Cancel
+                        </button>
+                        <button
+                          className='saveButton'
+                          onClick={() =>
+                            updateContent(
+                              current!.id,
+                              currentTitle!,
+                              current!.body,
+                            )
+                          }>
+                          <Image
+                            src={'img/icon/save.svg'}
+                            width={20}
+                            height={20}
+                            alt='Logo'
+                          />
+                          <br />
+                          Save
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        className='activateEdit'
+                        onClick={() => setEditTitle(true)}>
+                        <Image
+                          src={'img/icon/edit.svg'}
+                          width={40}
+                          height={20}
+                          alt='Logo'
+                        />
+                        <br />
+                        Edit
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div id='editBody'>
+                  <div className='inputSection'>
+                    {editBody ? (
+                      <textarea
+                        id='bodySection'
+                        className='activeBodyForm'
+                        onChange={(e: any) => {
+                          setCurrentBody(e.target.value);
+                        }}
+                        rows={4}
+                        cols={50}
+                        value={currentBody}></textarea>
+                    ) : (
+                      <p className='mainText'>{currentBody}</p>
+                    )}
+                  </div>
+                  <div className='buttonSection'>
+                    {editBody ? (
+                      <>
+                        <button
+                          className='cancelButton'
+                          onClick={() => setEditBody(false)}>
+                          <Image
+                            src={'img/icon/cancel.svg'}
+                            width={20}
+                            height={20}
+                            alt='Logo'
+                          />
+                          <br />
+                          Cancel
+                        </button>
+                        <button
+                          className='saveButton'
+                          onClick={() =>
+                            updateContent(
+                              current!.id,
+                              current!.title,
+                              currentBody!,
+                            )
+                          }>
+                          <Image
+                            src={'img/icon/save.svg'}
+                            width={20}
+                            height={20}
+                            alt='Logo'
+                          />
+                          <br />
+                          Save
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        className='activateEdit'
+                        onClick={() => setEditBody(true)}>
+                        <Image
+                          src={'img/icon/edit.svg'}
+                          width={40}
+                          height={20}
+                          alt='Logo'
+                        />
+                        <br />
+                        Edit
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

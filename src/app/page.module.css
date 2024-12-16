@@ -33,11 +33,14 @@
   text-align: left;
   color: #333;
   text-decoration: none;
+  display: flex;
+  justify-content: space-between;
 }
 .sideButton p,
 .activeButton p {
   margin: 5px 5px;
 }
+
 .activeButton,
 .sideButton:hover {
   background-color: #f5f8fa;
@@ -45,6 +48,8 @@
   color: #32a8f8;
   height: 44px;
   font-weight: bold;
+  display: flex;
+  justify-content: space-between;
 }
 #sideEdit {
   position: absolute;
