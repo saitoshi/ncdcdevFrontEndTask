@@ -149,6 +149,7 @@ export default function Home() {
         {/** コンテンツーの設定 */}
         <div id={styles.mainContent}>
           <div id={styles.mainContainer}>
+            {/**追加モードがオンになっているか */}
             {addMode ? (
               <>
                 <div id='editTitle'>
@@ -218,7 +219,6 @@ export default function Home() {
               </>
             ) : (
               <>
-                {' '}
                 <div id='editTitle'>
                   <div className='inputSection'>
                     {editTitle ? (
